@@ -35,3 +35,15 @@ Simple shell 0.3 +
 ### 5. Simple shell 1.0
 Simple shell 0.4 +
 + Implement the `env` built-in, that prints the current environment
+## Advanced tasks
+### 6.
+### 7.
+### 8.
+### 9.
+### 10.
+### 11.
+### 12.
+### 13.
+### 14.
+### 15.
+### 16.
