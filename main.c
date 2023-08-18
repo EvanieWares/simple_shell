@@ -11,7 +11,7 @@
 int main(int argc, char **argv, char **env)
 {
 	string buffer = NULL;
-	int strlen, a, i = 1;
+	int strlen, count, a, i = 1;
 	char **args;
 	size_t buffer_length;
 	pid_t pid;
@@ -37,9 +37,7 @@ int main(int argc, char **argv, char **env)
 		pid = fork();
 		if (pid == 0)
 		{
-			args = malloc(2 * sizeof(char *));
-			args[0] = buffer;
-			args[1] = NULL;
+			args = split_string(buffer, ' ', &count);
 			execve(args[0], args, env);
 			dprintf(STDERR_FILENO, "No such file or directory\n");
 			exit(ERROR_CODE);

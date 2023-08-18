@@ -6,13 +6,27 @@
  *
  * Return: number of characters
  */
-int _strlen(string src)
+size_t _strlen(const string src)
 {
-	int len = 0;
+	size_t len = 0;
 
 	while (src[len] != '\0')
 	{
 		len++;
 	}
+
 	return (len);
+}
+
+char *_strcpyn(char *dest, const char *src, int n)
+{
+	int i;
+
+	for (i = 0; src[i + n] != '\0'; i++)
+	{
+		dest[i] = src[i + n];
+	}
+
+	dest[i] = '\0';
+	return (dest);
 }

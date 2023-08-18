@@ -12,6 +12,8 @@
 
 typedef char *string;
 
-int _strlen(string src);
+size_t _strlen(const string src);
+char **split_string(char *src, char split_char, int *count);
+char *_strcpyn(char *dest, const char *src, int n);
 
 #endif /* SHELL_H */
