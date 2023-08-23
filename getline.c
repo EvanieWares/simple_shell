@@ -15,6 +15,7 @@ string get_buf(void)
 	bytes_read = getline(&buffer, &buffer_length, stdin);
 	if (bytes_read == -1 || feof(stdin))
 	{
+		free(buffer);
 		exit(0);
 	}
 	len = _strlen(buffer);
