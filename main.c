@@ -4,45 +4,36 @@
  * main - UNIX command line interpreter
  * @argc: number of arguments supplied
  * @argv: list of arguments supplied
- * @env: list of environment variables
+ * @envp: list of environment variables
  *
  * Return: 0 (Success)
  */
-int main(int argc, char **argv, char **env)
+int main(int argc, array argv, array envp)
 {
-	string buffer = NULL;
-	int strlen, count, a, i = 1;
-	char **args;
-	size_t buffer_length;
-	pid_t pid;
+	info_t info;
+	string buffer;
+	int i = 1;
+	bool pipped = false;
 
-	while (i)
+	(void) argc;
+	info.program_name = argv[0];
+	info.envp = envp;
+	while (i && !pipped)
 	{
+		info.process_no = i;
 		if (isatty(STDIN_FILENO) == 0)
 		{
-			i = 0;
+			pipped = true;
 		}
 		else
 		{
-			write(STDOUT_FILENO, PROMPT, sizeof(PROMPT) - 1);
+			_write(PROMPT);
 		}
-		a = getline(&buffer, &buffer_length, stdin);
-		if (a == -1)
-		{
-			dprintf(STDERR_FILENO, "\nUnable to get input\n");
-			exit(ERROR_CODE);
-		}
-		strlen = _strlen(buffer);
-		buffer[strlen - 1] = '\0';
-		pid = fork();
-		if (pid == 0)
-		{
-			args = split_string(buffer, ' ', &count);
-			execve(args[0], args, env);
-			dprintf(STDERR_FILENO, "No such file or directory\n");
-			exit(ERROR_CODE);
-		}
-		wait(NULL);
+		buffer = get_buf();
+		exec_cmd(buffer, info);
+		free(buffer);
+		i++;
 	}
 	return (0);
 }
+

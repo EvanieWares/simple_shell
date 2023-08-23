@@ -18,15 +18,62 @@ size_t _strlen(const string src)
 	return (len);
 }
 
-char *_strcpyn(char *dest, const char *src, int n)
+/**
+ * _strcpynn - copies string
+ * @dest: destination string
+ * @src: source string
+ * @dest_from: index to start copying to
+ * @src_from: index to start copying from
+ *
+ * Return: pointer to the dstination string
+ */
+char *_strcpynn(string dest, const string src, int dest_from, int src_from)
 {
 	int i;
 
-	for (i = 0; src[i + n] != '\0'; i++)
+	for (i = 0; src[i + src_from] != '\0'; i++)
 	{
-		dest[i] = src[i + n];
+		dest[i + dest_from] = src[i + src_from];
 	}
 
-	dest[i] = '\0';
+	dest[i + dest_from] = '\0';
 	return (dest);
+}
+
+/**
+ * _strcmp - compares two strings
+ * @s1: first string
+ * @s2: second string
+ *
+ * Return: 0 if the strings are equal
+ */
+int _strcmp(string s1, string s2)
+{
+	int i;
+	int len;
+	int result = 0;
+
+	if (_strlen(s1) >= _strlen(s2))
+	{
+		len = _strlen(s1);
+	}
+	else
+	{
+		len = _strlen(s2);
+	}
+
+	for (i = 0; i < len; i++)
+	{
+		if (s1[i] == s2[i])
+		{
+			continue;
+		}
+		else
+		{
+			result = s1[i] - s2[i];
+			break;
+		}
+	}
+
+	return (result);
 }

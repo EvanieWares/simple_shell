@@ -1,13 +1,20 @@
 #include "shell.h"
 
-int count_parts(char *src, char split_char);
+int count_parts(string src, char split_char);
 
-char **split_string(char *src, char split_char, int *count)
+/**
+ * split_string - breaks string into parts according to the delimiter
+ * @src: string to split
+ * @delim: the argument that delimit the token in parsed string
+ *
+ * Return: array containing the command and arguments
+ */
+char **split_string(string src, char delim)
 {
-	int i, k, parts_count, start_index = 0, j = 0;
-	char **parts;
+	int i = 0, k, parts_count, start_index = 0, j = 0;
+	array parts;
 
-	parts_count = count_parts(src, split_char);
+	parts_count = count_parts(src, delim);
 	parts = malloc((parts_count + 1) * sizeof(char *));
 	if (parts == NULL)
 	{
@@ -15,7 +22,7 @@ char **split_string(char *src, char split_char, int *count)
 	}
 	while (src[i] != '\0')
 	{
-		if (src[i] == split_char)
+		if (src[i] == delim)
 		{
 			parts[j] = malloc((i - start_index + 1) * sizeof(char));
 			if (parts[j] == NULL)
@@ -32,7 +39,7 @@ char **split_string(char *src, char split_char, int *count)
 		}
 		i++;
 	}
-	parts[j] = malloc ((i - start_index + 1) * sizeof(char));
+	parts[j] = malloc((i - start_index + 1) * sizeof(char));
 	if (parts[j] == NULL)
 	{
 		return (NULL);
@@ -44,12 +51,18 @@ char **split_string(char *src, char split_char, int *count)
 	parts[j][k - start_index] = '\0';
 	parts[j + 1] = NULL;
 
-	*count = parts_count;
-
 	return (parts);
 }
 
-int count_parts(char *str, char split_char)
+/**
+ * count_parts - count the number of parts the string will
+ * have after being splitted
+ * @str: string to count parts from
+ * @delim: the delimiter
+ *
+ * Return: the number of parts the string will have
+ */
+int count_parts(string str, char delim)
 {
 	int count = 1, i = 0;
 
@@ -59,7 +72,7 @@ int count_parts(char *str, char split_char)
 	}
 	while (str[i] != '\0')
 	{
-		if (str[i] == split_char)
+		if (str[i] == delim)
 		{
 			count++;
 		}
