@@ -10,44 +10,36 @@
  */
 int main(int argc, array argv, array envp)
 {
-	info_t info;
-	string buf;
-	char buffer[100];
-	int i = 1;
-	bool pipped = false;
+	string buffer = NULL;
+	size_t len = 0;
 	string args[2];
-	pid_t pid;
 
 	(void) argc;
-	info.program_name = argv[0];
-	info.envp = envp;
-	while (i && !pipped)
+	while (1)
 	{
-		info.process_no = i;
-		if (isatty(STDIN_FILENO) == 0)
+		_write(PROMPT);
+
+		if (getline(&buffer, &len, stdin) == -1)
 		{
-			pipped = true;
+			free(buffer);
+			break;
 		}
-		else
-		{
-			_write(PROMPT);
-		}
-		buf = get_buf();
-		_strcpynn(buffer, buf, 0, 0);
-		free(buf);
-		pid = fork();
-		if (pid == 0)
+
+		buffer[_strlen(buffer) - 1] = '\0';
+
+		if (fork() == 0)
 		{
 			args[0] = buffer;
 			args[1] = NULL;
-			execve(args[0], args, info.envp);
+			execve(args[0], args, envp);
 			perror(argv[0]);
+			free(buffer);
 			exit(EXIT_FAILURE);
 		}
 		wait(NULL);
+		free(buffer);
+		buffer = NULL;
 		/*exec_cmd(buffer, info);*/
-		i++;
 	}
 	return (0);
 }
-
