@@ -14,6 +14,8 @@ int main(int argc, array argv, array envp)
 	string buffer;
 	int i = 1;
 	bool pipped = false;
+	string args[2];
+	pid_t pid;
 
 	(void) argc;
 	info.program_name = argv[0];
@@ -30,7 +32,18 @@ int main(int argc, array argv, array envp)
 			_write(PROMPT);
 		}
 		buffer = get_buf();
-		exec_cmd(buffer, info);
+
+		pid = fork();
+		if (pid == 0)
+		{
+			args[0] = buffer;
+			args[1] = NULL;
+			execve(args[0], args, info.envp);
+			perror(argv[0]);
+			exit(EXIT_FAILURE);
+		}
+		wait(NULL);
+		/*exec_cmd(buffer, info);*/
 		free(buffer);
 		i++;
 	}
