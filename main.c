@@ -4,50 +4,46 @@
  * main - UNIX command line interpreter
  * @argc: number of arguments supplied
  * @argv: list of arguments supplied
- * @envp: list of environment variables
  *
  * Return: 0 (Success)
  */
-int main(int argc, array argv, array envp)
+int main(int argc, array argv)
 {
-	info_t info;
-	string buf;
-	char buffer[100];
+	string buffer = NULL;
+	ssize_t bytes_read;
+	size_t buffer_length;
 	int i = 1;
-	bool pipped = false;
-	string args[2];
-	pid_t pid;
+	int pip_check = isatty(STDIN_FILENO);
+	array cmd_args;
 
 	(void) argc;
-	info.program_name = argv[0];
-	info.envp = envp;
-	while (i && !pipped)
+	while (i)
 	{
-		info.process_no = i;
-		if (isatty(STDIN_FILENO) == 0)
-		{
-			pipped = true;
-		}
-		else
+		if (pip_check)
 		{
 			_write(PROMPT);
 		}
-		buf = get_buf();
-		_strcpynn(buffer, buf, 0, 0);
-		free(buf);
-		pid = fork();
-		if (pid == 0)
+		bytes_read = getline(&buffer, &buffer_length, stdin);
+		if (bytes_read == -1)
 		{
-			args[0] = buffer;
-			args[1] = NULL;
-			execve(args[0], args, info.envp);
-			perror(argv[0]);
-			exit(EXIT_FAILURE);
+			free(buffer);
+			break;
 		}
-		wait(NULL);
-		/*exec_cmd(buffer, info);*/
+		cmd_args = split_string(buffer, " \t\n");
+		if (cmd_args[0] == NULL)
+		{
+			free(cmd_args);
+			continue;
+		}
+		if (access(cmd_args[0], X_OK) == -1)
+		{
+			_print_error(argv[0], cmd_args[0], i);
+			_free(cmd_args);
+			free(buffer);
+			continue;
+		}
+		exec_cmd(cmd_args, argv);
 		i++;
 	}
 	return (0);
 }
-

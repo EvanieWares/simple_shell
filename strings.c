@@ -1,6 +1,33 @@
 #include "shell.h"
 
 /**
+ * num_to_string - converts a number to string
+ * @num: number to convert
+ * @str: char array to store the converted number
+ */
+void num_to_string(string str, int num)
+{
+	int j, i = 0;
+
+	do {
+		str[i++] = num % 10 + '0';
+		num /= 10;
+	} while (num > 0);
+
+	/* Reverse the string */
+	for (j = 0; j < i / 2; j++)
+	{
+		char temp = str[j];
+
+		str[j] = str[i - j - 1];
+		str[i - j - 1] = temp;
+	}
+
+	/* Add null terminator at the end */
+	str[i] = '\0';
+}
+
+/**
  * _strlen - returns the number of characters in a string
  * @src: string to count chars from
  *
@@ -16,64 +43,4 @@ size_t _strlen(const string src)
 	}
 
 	return (len);
-}
-
-/**
- * _strcpynn - copies string
- * @dest: destination string
- * @src: source string
- * @dest_from: index to start copying to
- * @src_from: index to start copying from
- *
- * Return: pointer to the dstination string
- */
-char *_strcpynn(string dest, const string src, int dest_from, int src_from)
-{
-	int i;
-
-	for (i = 0; src[i + src_from] != '\0'; i++)
-	{
-		dest[i + dest_from] = src[i + src_from];
-	}
-
-	dest[i + dest_from] = '\0';
-	return (dest);
-}
-
-/**
- * _strcmp - compares two strings
- * @s1: first string
- * @s2: second string
- *
- * Return: 0 if the strings are equal
- */
-int _strcmp(string s1, string s2)
-{
-	int i;
-	int len;
-	int result = 0;
-
-	if (_strlen(s1) >= _strlen(s2))
-	{
-		len = _strlen(s1);
-	}
-	else
-	{
-		len = _strlen(s2);
-	}
-
-	for (i = 0; i < len; i++)
-	{
-		if (s1[i] == s2[i])
-		{
-			continue;
-		}
-		else
-		{
-			result = s1[i] - s2[i];
-			break;
-		}
-	}
-
-	return (result);
 }

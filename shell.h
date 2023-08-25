@@ -9,26 +9,27 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <fcntl.h>
+#include <string.h>
 
 #define PROMPT "$ "
 #define ERROR_CODE 70
+#define MAX_ARGS 20
 
 typedef char *string;
 typedef char **array;
-
-typedef struct program_info
-{
-	int process_no;
-	string program_name;
-	array envp;
-} info_t;
-
+extern array environ;
+/* free_array.c */
+void _free(array arr);
+/* errors.c */
+void _print_error(string pg_name, string cmd_name, int process_no);
+/* write.c */
 int _write(string str);
-int _strcmp(string s1, string s2);
-string get_buf(void);
+/* string.c */
 size_t _strlen(const string src);
-void exec_cmd(string buffer, info_t info);
-char **split_string(string src, char delim);
-char *_strcpynn(string dest, const string src, int dest_from, int src_from);
+void num_to_string(string str, int num);
+/* exec_cmd.c */
+void exec_cmd(array cmd_args, array argv);
+/* split_string.c */
+array split_string(string buffer, string split_con);
 
 #endif /* SHELL_H */
