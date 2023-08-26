@@ -10,10 +10,8 @@
 int main(int argc, array argv)
 {
 	string buffer = NULL, full_cmd;
-	ssize_t bytes_read;
 	size_t buffer_length;
-	int count = 0;
-	int pip_check = isatty(STDIN_FILENO);
+	int count = 0, bytes_read, pip_check = isatty(STDIN_FILENO);
 	array cmd_args = NULL;
 
 	(void) argc;
@@ -32,11 +30,11 @@ int main(int argc, array argv)
 
 			break;
 		}
-
 		cmd_args = split_string(buffer, " \n");
 		if (cmd_args[0] == NULL)
 			continue;
-
+		if (is_builtin(cmd_args))
+			continue;
 		full_cmd = valid_cmd(cmd_args[0]);
 		if (full_cmd == NULL)
 		{
@@ -47,10 +45,9 @@ int main(int argc, array argv)
 		}
 
 		exec_full_cmd(full_cmd, cmd_args, argv);
-		if (full_cmd != cmd_args[0])
-			free(full_cmd);
+		/*if (full_cmd != cmd_args[0])
+			free(full_cmd);*/
 	}
-
 	return (errno);
 }
 

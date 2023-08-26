@@ -38,6 +38,7 @@ int _strncmp(string first_str, string second_str, int n);
 char *_concatenate(string str1, string str2, string str3);
 
 /* string2.c */
+int _strcmp(char *s1, char *s2);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
 array split_string(string buffer, const string split_con);
@@ -50,5 +51,8 @@ void exec_full_cmd(string full_cmd, array cmd_args, array argv);
 string valid_cmd(string cmd);
 string get_full_cmd(string cmd);
 bool is_valid_cmd(array cmd_args);
+
+/* builtins.c */
+int is_builtin(array args);
 
 #endif /* SHELL_H */

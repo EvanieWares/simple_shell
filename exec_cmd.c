@@ -28,7 +28,6 @@ void exec_cmd(array cmd_args, array argv)
 		status = WEXITSTATUS(status);
 	}
 	errno = status;
-	free(cmd_args);
 }
 
 /**

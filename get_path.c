@@ -61,21 +61,26 @@ string get_full_cmd(string cmd)
 	return (NULL);
 }
 
-
+/**
+ * is_command_valid - checks if a command is a valid command
+ * @command: command to check
+ *
+ * Return: 1 if true, 0 if false
+ */
 int is_command_valid(const string command)
 {
-    struct stat buffer;
+	struct stat buffer;
 
-    if (command == NULL || stat(command, &buffer))
-    {
-    	return (0);
-    }
+	if (command == NULL || stat(command, &buffer))
+	{
+		return (0);
+	}
 
-    if (buffer.st_mode & S_IFREG)
-    {
-    	return (1);
-    }
-    return (0);
+	if (buffer.st_mode & S_IFREG)
+	{
+		return (1);
+	}
+	return (0);
 }
 
 /**
