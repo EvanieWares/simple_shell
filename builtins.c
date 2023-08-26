@@ -38,9 +38,12 @@ int is_builtin(array cmd_args, string pg_name, string buffer, int *process_no)
 				errno = 2;
 				_print_atoi_error(pg_name, cmd_args, *process_no);
 				*process_no += 1;
+				free_array(cmd_args);
 				return (1);
 			}
-			exit(status);
+			free(buffer);
+			free_array(cmd_args);
+			exit(status % 256);
 		}
 		free(buffer);
 		free_array(cmd_args);
@@ -49,7 +52,6 @@ int is_builtin(array cmd_args, string pg_name, string buffer, int *process_no)
 	if (_strcmp(cmd_args[0], "env") == 0)
 	{
 		print_env();
-		buffer = NULL;
 		free_array(cmd_args);
 		*process_no += 1;
 		status = 1;
