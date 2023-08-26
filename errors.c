@@ -11,10 +11,21 @@ void _print_error(string pg_name, string cmd_name, int process_no)
 	char process[4];
 
 	num_to_string(process, process_no);
-	_write(pg_name);
-	_write(": ");
-	_write(process);
-	_write(": ");
-	_write(cmd_name);
-	_write(": not found\n");
+	_ewrite(pg_name);
+	_ewrite(": ");
+	_ewrite(process);
+	_ewrite(": ");
+	_ewrite(cmd_name);
+	_ewrite(": not found\n");
+}
+
+/**
+ * _ewrite - prints string to stderr
+ * @str: string to print
+ *
+ * Return: bytes printed
+ */
+int _ewrite(string str)
+{
+	return (write(STDERR_FILENO, str, _strlen(str)));
 }

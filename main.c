@@ -9,41 +9,66 @@
  */
 int main(int argc, array argv)
 {
-	string buffer = NULL;
+	string buffer = NULL, full_cmd;
 	ssize_t bytes_read;
 	size_t buffer_length;
-	int i = 1;
+	int count = 0;
 	int pip_check = isatty(STDIN_FILENO);
-	array cmd_args;
+	array cmd_args = NULL;
 
 	(void) argc;
-	while (i)
+	while (1)
 	{
+		count++;
 		if (pip_check)
-		{
 			_write(PROMPT);
-		}
+
 		bytes_read = getline(&buffer, &buffer_length, stdin);
 		if (bytes_read == -1)
 		{
 			free(buffer);
+			if (pip_check)
+				_write("\n");
+
 			break;
 		}
-		cmd_args = split_string(buffer, " \t\n");
+
+		cmd_args = split_string(buffer, " \n");
 		if (cmd_args[0] == NULL)
+			continue;
+
+		full_cmd = valid_cmd(cmd_args[0]);
+		if (full_cmd == NULL)
 		{
+			_print_error(argv[0], cmd_args[0], count);
 			free(cmd_args);
+			errno = 127;
 			continue;
 		}
-		if (access(cmd_args[0], X_OK) == -1)
-		{
-			_print_error(argv[0], cmd_args[0], i);
-			_free(cmd_args);
-			free(buffer);
-			continue;
-		}
-		exec_cmd(cmd_args, argv);
-		i++;
+
+		exec_full_cmd(full_cmd, cmd_args, argv);
+		if (full_cmd != cmd_args[0])
+			free(full_cmd);
 	}
-	return (0);
+
+	return (errno);
 }
+
+		/**
+		* if (access(cmd_args[0], X_OK) == 0)
+		{
+			exec_cmd(cmd_args, argv);
+		}
+		else
+		{
+			string full_cmd = get_full_cmd(cmd_args[0]);
+			if (full_cmd == NULL)
+			{
+				_print_error(argv[0], cmd_args[0], i);
+				free(cmd_args);
+				errno = 127;
+				continue;
+			}
+			exec_full_cmd(full_cmd, cmd_args, argv);
+		}
+		*/

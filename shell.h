@@ -6,30 +6,49 @@
 #include <unistd.h>
 #include <stddef.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <string.h>
 
 #define PROMPT "$ "
-#define ERROR_CODE 70
-#define MAX_ARGS 20
+#define MAX_ARGS 64
 
 typedef char *string;
-typedef char **array;
+typedef string *array;
 extern array environ;
-/* free_array.c */
-void _free(array arr);
+
+/* memory.c */
+void _free(array args);
+
 /* errors.c */
-void _print_error(string pg_name, string cmd_name, int process_no);
+int _ewrite(const string str);
+void _print_error(const string program, const string cmd, int count);
+
 /* write.c */
-int _write(string str);
+int _write(const string str);
+
 /* string.c */
-size_t _strlen(const string src);
+char *_strdup(const string str);
+int _strlen(const string str);
 void num_to_string(string str, int num);
+int _strncmp(string first_str, string second_str, int n);
+char *_concatenate(string str1, string str2, string str3);
+
+/* string2.c */
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
+array split_string(string buffer, const string split_con);
+
 /* exec_cmd.c */
 void exec_cmd(array cmd_args, array argv);
-/* split_string.c */
-array split_string(string buffer, string split_con);
+void exec_full_cmd(string full_cmd, array cmd_args, array argv);
+
+/* get_path.c */
+string valid_cmd(string cmd);
+string get_full_cmd(string cmd);
+bool is_valid_cmd(array cmd_args);
 
 #endif /* SHELL_H */

@@ -7,6 +7,38 @@
  */
 void exec_cmd(array cmd_args, array argv)
 {
+	pid_t child_pid;
+	int status;
+
+	child_pid = fork();
+	if (child_pid == -1)
+	{
+		perror("fork");
+		return;
+	}
+	if (child_pid == 0)
+	{
+		execve(cmd_args[0], cmd_args, environ);
+		perror(argv[0]);
+		exit(2);
+	}
+	wait(&status);
+	if (WIFEXITED(status))
+	{
+		status = WEXITSTATUS(status);
+	}
+	errno = status;
+	free(cmd_args);
+}
+
+/**
+ * exec_full_cmd - executes the command
+ * @cmd: command including path
+ * @cmd_args: array of command and it arguments
+ * @argv: array of arguments supplied to the program
+ */
+void exec_full_cmd(string cmd, array cmd_args, array argv)
+{
 	pid_t pid;
 	int status;
 
@@ -17,18 +49,20 @@ void exec_cmd(array cmd_args, array argv)
 		_free(cmd_args);
 		exit(EXIT_FAILURE);
 	}
-	if (pid == 0)
+	else if (pid == 0)
 	{
-		execve(cmd_args[0], cmd_args, environ);
+		execve(cmd, cmd_args, environ);
 		perror(argv[0]);
-		_free(cmd_args);
 		exit(EXIT_FAILURE);
 	}
-	wait(&status);
-	if (WIFEXITED(status))
+	else
 	{
-		status = WEXITSTATUS(status);
+		wait(&status);
+		if (WIFEXITED(status))
+		{
+			status = WEXITSTATUS(status);
+		}
+		errno = status;
+		free(cmd_args);
 	}
-	errno = status;
-	free(cmd_args);
 }
