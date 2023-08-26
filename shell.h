@@ -18,8 +18,11 @@ typedef char *string;
 typedef char **array;
 extern array environ;
 
+/* atoi.c */
+int _atoi(const string str);
+
 /* builtins.c */
-int is_builtin(array cmd_args, string buffer);
+int is_builtin(array cmd_args, string pg_name, string buffer, int *process_no);
 
 /* check_cmd */
 int check_cmd(array cmd_args, array argv, int process_no);
@@ -29,6 +32,7 @@ void free_array(array args);
 
 /* errors.c */
 void _print_error(string pg_name, string cmd_name, int process_no);
+void _print_atoi_error(string pg_name, array cmd_args, int process_no);
 
 /* write.c */
 int _write(string str);

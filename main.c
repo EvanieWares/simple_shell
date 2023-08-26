@@ -35,7 +35,7 @@ int main(int argc, array argv)
 			continue;
 		}
 
-		if (is_builtin(cmd_args, buffer))
+		if (is_builtin(cmd_args, argv[0], buffer, &i))
 			continue;
 		if (!check_cmd(cmd_args, argv, i))
 		{
