@@ -2,33 +2,34 @@
 
 /**
  * exec_cmd - executes the command
- * @cmd_args: array of command and it arguments
+ * @cmd_args: array of user command and it arguments
  * @argv: array of arguments supplied to the program
  */
 void exec_cmd(array cmd_args, array argv)
 {
-	pid_t pid;
+	pid_t child_pid;
 	int status;
 
-	pid = fork();
-	if (pid == -1)
+	child_pid = fork();
+	if (child_pid < 0)
 	{
 		perror(argv[0]);
-		_free(cmd_args);
-		exit(EXIT_FAILURE);
+		exit(-1);
 	}
-	if (pid == 0)
+	if (child_pid == 0)
 	{
 		execve(cmd_args[0], cmd_args, environ);
 		perror(argv[0]);
-		_free(cmd_args);
-		exit(EXIT_FAILURE);
+		exit(2);
 	}
-	wait(&status);
-	if (WIFEXITED(status))
+	else
 	{
-		status = WEXITSTATUS(status);
+		wait(&status);
+		if (WIFEXITED(status))
+		{
+			status = WEXITSTATUS(status);
+		}
+		errno = status;
+		free_array(cmd_args);
 	}
-	errno = status;
-	free(cmd_args);
 }

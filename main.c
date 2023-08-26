@@ -14,15 +14,13 @@ int main(int argc, array argv)
 	size_t buffer_length;
 	int i = 1;
 	int pip_check = isatty(STDIN_FILENO);
-	array cmd_args;
+	array cmd_args = NULL;
 
 	(void) argc;
 	while (i)
 	{
 		if (pip_check)
-		{
 			_write(PROMPT);
-		}
 		bytes_read = getline(&buffer, &buffer_length, stdin);
 		if (bytes_read == -1)
 		{
@@ -35,11 +33,12 @@ int main(int argc, array argv)
 			free(cmd_args);
 			continue;
 		}
-		if (access(cmd_args[0], X_OK) == -1)
+
+		if (!check_cmd(cmd_args, argv, i))
 		{
-			_print_error(argv[0], cmd_args[0], i);
-			_free(cmd_args);
 			free(buffer);
+			buffer = NULL;
+			i++;
 			continue;
 		}
 		exec_cmd(cmd_args, argv);
