@@ -14,7 +14,7 @@ void exec_cmd(array cmd_args, array argv)
 	if (child_pid == -1)
 	{
 		perror("fork");
-		return;
+		exit(-1);
 	}
 	if (child_pid == 0)
 	{
@@ -28,6 +28,7 @@ void exec_cmd(array cmd_args, array argv)
 		status = WEXITSTATUS(status);
 	}
 	errno = status;
+	free(cmd_args);
 }
 
 /**

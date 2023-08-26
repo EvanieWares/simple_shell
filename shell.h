@@ -55,4 +55,5 @@ bool is_valid_cmd(array cmd_args);
 /* builtins.c */
 int is_builtin(array args);
 
+int _atoi(char *s);
 #endif /* SHELL_H */

@@ -23,10 +23,16 @@ void print_env(void)
  */
 int is_builtin(array args)
 {
+	int status = 0;
+
 	if (_strcmp(args[0], "exit") == 0)
 	{
+		if (args[1] != NULL)
+		{
+			status = _atoi(args[1]);
+		}
 		free(args);
-		exit(0);
+		exit(status);
 	}
 	if (_strcmp(args[0], "env") == 0)
 	{
