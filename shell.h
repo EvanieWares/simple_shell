@@ -18,6 +18,9 @@ typedef char *string;
 typedef char **array;
 extern array environ;
 
+/* builtins.c */
+int is_builtin(array cmd_args, string buffer);
+
 /* check_cmd */
 int check_cmd(array cmd_args, array argv, int process_no);
 

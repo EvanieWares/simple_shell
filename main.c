@@ -17,6 +17,7 @@ int main(int argc, array argv)
 	array cmd_args = NULL;
 
 	(void) argc;
+	errno = 0;
 	while (i)
 	{
 		if (pip_check)
@@ -34,6 +35,8 @@ int main(int argc, array argv)
 			continue;
 		}
 
+		if (is_builtin(cmd_args, buffer))
+			continue;
 		if (!check_cmd(cmd_args, argv, i))
 		{
 			free(buffer);
