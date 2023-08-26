@@ -39,10 +39,11 @@ int main(int argc, array argv)
 			free(buffer);
 			buffer = NULL;
 			i++;
+			errno = 127;
 			continue;
 		}
 		exec_cmd(cmd_args, argv);
 		i++;
 	}
-	return (0);
+	return (errno);
 }
